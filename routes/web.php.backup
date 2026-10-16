@@ -1,0 +1,37 @@
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use 
+App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+Route::get('/', function () {
+    return Inertia::render('Welcome');
+})->name('home');
+
+Route::post('/login', 
+[AuthenticatedSessionController::class, 'store'])
+    ->name('login.store');
+
+Route::post('/logout', 
+[AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
+
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', function () {
+        return Inertia::render('Admin/Home');
+    })->name('admin.home');
+});
+
+
+Route::get('/register', [RegisteredUserController::class, 
+'create'])
+    ->name('register');
+
+Route::post('/register', 
+[RegisteredUserController::class, 'store'])
+    ->name('register.store');
+
